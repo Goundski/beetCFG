@@ -1,7 +1,6 @@
 # Beets configuration --------------------------------------------------------
 # beets version 1.4.7
-# Python version 3.7.0
-# Matthew Rothfuss 10/03/2018
+# Goundski 02/05/2022
 
 directory: /music
 library: /config/musiclibrary.blb
