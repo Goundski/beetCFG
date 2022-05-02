@@ -1,0 +1,145 @@
+# Beets configuration --------------------------------------------------------
+# beets version 1.4.7
+# Python version 3.7.0
+# Matthew Rothfuss 10/03/2018
+
+directory: /music
+library: /config/musiclibrary.blb
+
+asciify_paths: yes
+threaded: yes
+per_disc_numbering: yes
+art_filename: albumart
+original_date: no
+
+import:
+  # write metadata to music files
+  write: yes
+
+  # move imported files from source to the music directory
+  move: yes
+  copy: no
+  resume: ask
+  log: beetslog.log
+  incremental: yes
+  quiet_fallback: skip
+  timid: no
+
+# Plugins --------------------------------------------------------------------
+
+plugins: [
+  info,
+  inline,
+  beatport,
+  fetchart,
+  embedart,
+  ftintitle,
+  lastgenre,
+  missing,
+  chroma,
+  scrub,
+  zero,
+  duplicates,
+  discogs,
+  mbcollection,
+  convert,
+  replaygain,
+  permissions
+]
+
+discogs:
+  user_token: yTkoaXcScqADjReavEjyTLJrInRdqQNpCrtlrgae
+
+fetchart:
+  auto: yes
+  cover_names: cover front album art
+  minwidth: 500
+  enforce_ratio: yes
+  fanarttv_key: REDACTED
+  google_key: REDACTED
+  sources: coverart albumart amazon google fanarttv filesystem
+
+embedart:
+  auto: yes
+  compare_threshold: 50
+  ifempty: yes
+
+ftintitle:
+  auto: yes
+  format: (feat. {0})
+
+lastgenre:
+  auto: yes
+  count: 1
+  force: no
+  source: track
+
+missing:
+  format: $albumartist - $album - $title
+  count: yes
+  total: no
+
+chroma:
+  auto: yes
+
+acoustid:
+  apikey: EiLZhQiJF2
+
+scrub:
+  auto: yes
+
+zero:
+  fields: comments grouping rating
+
+duplicates:
+  count: yes
+
+convert:
+  auto: no
+  tmpdir: /datastore/tmp/
+  formats:
+    mp3_320:
+      command: ffmpeg -i $source -y -vn -b:a 320k $dest
+      extension: mp3
+
+permissions:
+  file: 644
+  dir: 755
+
+musicbrainz:
+  user: Goundski
+  pass: D3nn1s16324
+
+mbcollection:
+  auto: no
+
+ignore: .AppleDouble ._* *~ .DS_Store
+
+replaygain:
+    auto: no
+
+replace:
+    '^\.': _
+    '[\x00-\x1f]': _
+    '[<>:"\?\*\|]': _
+    '[\xE8-\xEB]': e
+    '[\xEC-\xEF]': i
+    '[\xE2-\xE6]': a
+    '[\xF2-\xF6]': o
+    '[\xF8]': o
+    '\.$': _
+    '\s+$': ''
+
+item_fields:
+    multidisc: 1 if disctotal > 1 else 0
+
+# Paths ----------------------------------------------------------------------
+
+# Paths and filenames for music files
+# relative to music directory
+paths:
+    default: Albums/$albumartist/$album%aunique{}/%if{$multidisc,Disc 0$disc/}$track. $artist - $title
+    singleton: Singles/$artist/$artist - $title
+    comp: Albums/$album%aunique{}/%if{$multidisc,Disc 0$disc/}$track. $artist - $title
+    albumtype:soundtrack: Albums/$album/%if{$multidisc,Disc 0$disc/}$track. $artist - $title 
+        
